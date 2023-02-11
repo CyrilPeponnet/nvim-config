@@ -1,11 +1,22 @@
 return {
 
-	-- auto pairs
+	-- auto pair
 	{
-		"echasnovski/mini.pairs",
-		event = "VeryLazy",
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		opts = {
+			fast_wrap = {
+				map = "<C-l>",
+				chars = { "{", "[", "(", '"', "'" },
+				pattern = string.gsub([[ [%'%"%)%>%]%},] ]], "%s+", ""),
+				end_key = " ",
+				keys = "asdghklqwertyuiopzxcvbnmfj",
+				highlight = "HopNextKey",
+				highlight_grey = "HopUnmatched",
+			},
+		},
 		config = function(_, opts)
-			require("mini.pairs").setup(opts)
+			require("nvim-autopairs").setup(opts)
 		end,
 	},
 

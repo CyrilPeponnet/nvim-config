@@ -57,6 +57,28 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("BufEnter", {
 	pattern = { "*" },
 	callback = function()
+		-- ignore what we dont want.
+		local ignore = {
+			"neo-tree",
+			"alpha",
+			"qf",
+			"help",
+			"man",
+			"notify",
+			"lspinfo",
+			"spectre_panel",
+			"startuptime",
+			"tsplayground",
+			"PlenaryTestPopup",
+		}
+		for i = 1, #ignore do
+			if ignore[i] == vim.bo.filetype then
+				return
+			end
+		end
+		-- used to debug
+		--require("lazy.core.util").warn("Buf type".. vim.bo.filetype .. " change from " .. tstate.path .. " to " .. path)
+
 		local path = require("util").get_root()
 		local tstate = require("neo-tree.sources.manager").get_state("filesystem")
 		if not tstate.path then

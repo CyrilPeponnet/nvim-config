@@ -186,17 +186,28 @@ return {
 	},
 
 	{
-		"norcalli/nvim-colorizer.lua",
+		"NvChad/nvim-colorizer.lua",
 		event = "VeryLazy",
 		config = function()
-			require("colorizer").setup({ "*" }, {
-				RGB = true, -- #RGB hex codes
-				RRGGBB = true, -- #RRGGBB hex codes
-				RRGGBBAA = true, -- #RRGGBBAA hex codes
-				rgb_fn = true, -- CSS rgb() and rgba() functions
-				hsl_fn = true, -- CSS hsl() and hsla() functions
-				css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-				css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+			require("colorizer").setup({
+				filetypes = { "*" },
+				user_default_options = {
+					RGB = true, -- #RGB hex codes
+					RRGGBB = true, -- #RRGGBB hex codes
+					names = false, -- "Name" codes like Blue or blue
+					RRGGBBAA = true, -- #RRGGBBAA hex codes
+					AARRGGBB = true, -- 0xAARRGGBB hex codes
+					rgb_fn = true, -- CSS rgb() and rgba() functions
+					hsl_fn = true, -- CSS hsl() and hsla() functions
+					css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+					css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+					-- Available modes for `mode`: foreground, background,  virtualtext
+					mode = "virtualtext", -- Set the display mode.
+					-- Available methods are false / true / "normal" / "lsp" / "both"
+					-- True is same as normal
+					tailwind = true, -- Enable tailwind colors
+					virtualtext = "■■■■■■",
+				},
 			})
 		end,
 	},
@@ -255,6 +266,9 @@ return {
 
 			return {
 				options = {
+					section_separators = { left = "", right = "" },
+					component_separators = { left = "|", right = "|" },
+					cons_enabled = true,
 					theme = "auto",
 					globalstatus = true,
 					disabled_filetypes = { statusline = { "dashboard", "lazy", "alpha" } },
@@ -281,12 +295,13 @@ return {
             },
 					},
 					lualine_x = {
-            -- stylua: ignore
-           {
-              function() return require("noice").api.status.command.get() end,
-              cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-              color = fg("Statement")
-            },
+            -- this display the last key command done not usefull
+            -- stylua: ignore 
+           -- {
+           --    function() return require("noice").api.status.command.get() end,
+           --    cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
+           --    color = fg("Statement")
+           --  },
 						-- Show the messages like recording of macro
 						--   -- stylua: ignore
 						{
@@ -313,13 +328,10 @@ return {
 						},
 					},
 					lualine_y = {
-						{ "progress", separator = "", padding = { left = 1, right = 0 } },
-						{ "location", padding = { left = 0, right = 1 } },
+						{ "progress", separator = "", padding = { left = 1, right = 1 } },
 					},
 					lualine_z = {
-						function()
-							return " " .. os.date("%R")
-						end,
+						{ "location", padding = { left = 0, right = 2 } },
 					},
 				},
 				extensions = { "nvim-tree" },
@@ -333,7 +345,7 @@ return {
 		opts = {
 			plugins = { spelling = true },
 			window = {
-				border = "single", -- none, single, double, shadow
+				border = "rounded", -- none, single, double, shadow
 				position = "bottom", -- bottom, top
 				margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
 				padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]

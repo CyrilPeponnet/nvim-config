@@ -66,8 +66,10 @@ return {
 			defaults = {
 				layout_strategy = "vertical",
 				layout_config = {
-					preview_height = 0.7,
-					width = 0.9,
+					vertical = {
+						preview_height = 0.7,
+						width = 0.9,
+					},
 				},
 				prompt_prefix = " ",
 				selection_caret = " ",

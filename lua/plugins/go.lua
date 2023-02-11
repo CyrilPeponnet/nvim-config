@@ -8,7 +8,7 @@ return {
 					settings = {
 						gopls = {
 							-- buildFlags = { "-tags=requires_docker" }, -- custom build flags
-							gofumpt = true, -- A stricter gofmt
+							gofumpt = false, -- A stricter gofmt but remove blank line after code blocks
 							codelenses = {
 								gc_details = true, -- Toggle the calculation of gc annotations
 								generate = true, -- Runs go generate for a given directory
@@ -26,7 +26,7 @@ return {
 							analyses = {
 								fieldalignment = true, -- find structs that would use less memory if their fields were sorted
 								nilness = true, -- check for redundant or impossible nil comparisons
-								shadow = true, -- check for possible unintended shadowing of variables
+								shadow = false, -- check for possible unintended shadowing of variables
 								unusedparams = true, -- check for unused parameters of functions
 								unusedwrite = true, -- checks for unused writes, an instances of writes to struct fields and arrays that are never read
 							},
@@ -38,7 +38,7 @@ return {
 	},
 	{
 		"ray-x/go.nvim",
-		lazy = true,
+		ft = { "go", "gomod", "gosum", "gohtmltmp" },
 		config = function()
 			require("go").setup({ gofmt = "gopls" })
 		end,
