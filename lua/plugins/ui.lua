@@ -108,6 +108,7 @@ return {
 				override = {
 					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
 					["vim.lsp.util.stylize_markdown"] = true,
+					["cmp.entry.get_documentation"] = true,
 				},
 			},
 			presets = {
@@ -199,8 +200,8 @@ return {
 					AARRGGBB = true, -- 0xAARRGGBB hex codes
 					rgb_fn = true, -- CSS rgb() and rgba() functions
 					hsl_fn = true, -- CSS hsl() and hsla() functions
-					css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-					css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+					css = false, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+					css_fn = false, -- Enable all CSS *functions*: rgb_fn, hsl_fn
 					-- Available modes for `mode`: foreground, background,  virtualtext
 					mode = "virtualtext", -- Set the display mode.
 					-- Available methods are false / true / "normal" / "lsp" / "both"
@@ -370,7 +371,7 @@ return {
 				["<leader>s"] = { name = "+search" },
 				["<leader>sn"] = { name = "+noice" },
 				["<leader>u"] = { name = "+ui" },
-				["<leader>t"] = { name = "+trouble" },
+				["<leader>t"] = { name = "+testing" },
 			})
 		end,
 	},

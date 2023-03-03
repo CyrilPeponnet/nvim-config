@@ -28,14 +28,15 @@ return {
 					require("window-picker").setup({
 						autoselect_one = true,
 						include_current = false,
+						use_winbar = "smart",
 						filter_rules = {
 							-- filter using buffer options
 							bo = {
 								-- if the file type is one of following, the window will be ignored
-								filetype = { "neo-tree", "neo-tree-popup", "notify" },
+								filetype = { "neo-tree", "neo-tree-popup", "notify", "neotest-summary" },
 
 								-- if the buffer type is one of following, the window will be ignored
-								buftype = { "terminal", "quickfix" },
+								buftype = { "terminal", "quickfix", "help" },
 							},
 						},
 						other_win_hl_color = "#4f76e3",

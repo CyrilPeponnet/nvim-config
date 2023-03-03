@@ -1,3 +1,5 @@
+local Util = require("util")
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -49,9 +51,8 @@ return {
 		"nvim-neotest/neotest",
 		event = "VeryLazy",
 		dependencies = {
-			{
-				"nvim-neotest/neotest-go",
-			},
+			"nvim-treesitter",
+			"nvim-neotest/neotest-go",
 			{
 				"andythigpen/nvim-coverage",
 				config = function()
@@ -73,6 +74,10 @@ return {
 		},
 		config = function()
 			require("neotest").setup({
+				output = {
+					enabled = true,
+					open_on_run = "",
+				},
 				adapters = {
 					require("neotest-go")({
 						experimental = {
@@ -83,5 +88,77 @@ return {
 				},
 			})
 		end,
+		keys = {
+			{
+				"<leader>TP",
+				function()
+					require("neotest").run.run(Util.get_root())
+					require("coverage").load(true)
+					require("neotest").summary.open()
+				end,
+				desc = "Test Project",
+			},
+			{
+				"<leader>Tp",
+				function()
+					require("neotest").run.run(vim.fn.expand("%:p:h"))
+					require("coverage").load(true)
+					require("neotest").summary.open()
+				end,
+				desc = "Test Package",
+			},
+			{
+				"<leader>TF",
+				function()
+					local f = vim.fn.expand("%")
+					local s = "_test.go"
+					if not f:sub(-#s) ~= s then
+						f = f:sub(0, f:len() - 3) .. s
+					end
+					require("neotest").run.run(f)
+					require("coverage").load(true)
+					require("neotest").summary.open()
+				end,
+				desc = "Test File",
+			},
+			{
+				"<leader>Tf",
+				function()
+					require("neotest").run.run()
+					require("coverage").load(true)
+					require("neotest").summary.open()
+				end,
+				desc = "Test Function",
+			},
+			{
+				"<leader>Tt",
+				function()
+					require("neotest").summary.toggle()
+				end,
+				desc = "Toggle Summary",
+			},
+			{
+				"<leader>Tq",
+				function()
+					require("coverage").hide()
+					require("neotest").summary.close()
+				end,
+				desc = "Quit tests",
+			},
+			{
+				"<leader>Tn",
+				function()
+					require("neotest").jump.next({ status = "failed" })
+				end,
+				desc = "Next failed test",
+			},
+			{
+				"<leader>TN",
+				function()
+					require("neotest").jump.prev({ status = "failed" })
+				end,
+				desc = "Previous failed test",
+			},
+		},
 	},
 }

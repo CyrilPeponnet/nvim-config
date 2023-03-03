@@ -36,16 +36,23 @@ return {
 			-- LSP Server Settings
 			---@type lspconfig.options
 			servers = {
+				bashls = {},
 				jsonls = {},
-				sumneko_lua = {
+				lua_ls = {
 					-- mason = false, -- set to false if you don't want this server to be installed with mason
 					settings = {
 						Lua = {
-							workspace = {
-								checkThirdParty = false,
+							runtime = {
+								version = "LuaJIT",
 							},
-							completion = {
-								callSnippet = "Replace",
+							diagnostics = {
+								globals = { "vim" },
+							},
+							workspace = {
+								library = vim.api.nvim_get_runtime_file("", true),
+							},
+							telemetry = {
+								enable = false,
 							},
 						},
 					},
@@ -133,8 +140,6 @@ return {
 					nls.builtins.formatting.prettierd,
 					nls.builtins.formatting.stylua,
 					nls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2" } }),
-					nls.builtins.code_actions.shellcheck,
-					nls.builtins.diagnostics.shellcheck,
 				},
 			}
 		end,

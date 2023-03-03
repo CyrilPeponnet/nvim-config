@@ -45,9 +45,11 @@ return {
 				"<cmd>Telescope buffers show_all_buffers=true<cr>",
 				desc = "Switch Buffer",
 			},
+			-- most used search
 			{ "<leader>/", require("util").telescope("live_grep"), desc = "Live grep" },
 			{ "<leader><space>", require("util").telescope("files"), desc = "Find files" },
-			-- search
+			{ "<leader><enter>", ":Telescope resume<cr>", desc = "Resume last telescope picker" },
+			-- various search
 			{ "<leader>sw", require("util").telescope("grep_string"), desc = "Grep word under cursor" },
 			{ "<leader>sr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
 			{ "<leader>sb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
@@ -73,7 +75,7 @@ return {
 				},
 				prompt_prefix = " ",
 				selection_caret = " ",
-				theme = "dropdown",
+				theme = "ivy",
 				mappings = {
 					i = {
 						["<c-t>"] = function(...)
