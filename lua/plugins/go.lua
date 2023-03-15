@@ -90,7 +90,7 @@ return {
 		end,
 		keys = {
 			{
-				"<leader>TP",
+				"<leader>tP",
 				function()
 					require("neotest").run.run(Util.get_root())
 					require("coverage").load(true)
@@ -99,7 +99,7 @@ return {
 				desc = "Test Project",
 			},
 			{
-				"<leader>Tp",
+				"<leader>tp",
 				function()
 					require("neotest").run.run(vim.fn.expand("%:p:h"))
 					require("coverage").load(true)
@@ -108,7 +108,7 @@ return {
 				desc = "Test Package",
 			},
 			{
-				"<leader>TF",
+				"<leader>tF",
 				function()
 					local f = vim.fn.expand("%")
 					local s = "_test.go"
@@ -122,7 +122,7 @@ return {
 				desc = "Test File",
 			},
 			{
-				"<leader>Tf",
+				"<leader>tf",
 				function()
 					require("neotest").run.run()
 					require("coverage").load(true)
@@ -138,7 +138,7 @@ return {
 				desc = "Toggle Summary",
 			},
 			{
-				"<leader>Tq",
+				"<leader>tq",
 				function()
 					require("coverage").hide()
 					require("neotest").summary.close()
@@ -146,14 +146,14 @@ return {
 				desc = "Quit tests",
 			},
 			{
-				"<leader>Tn",
+				"<leader>tn",
 				function()
 					require("neotest").jump.next({ status = "failed" })
 				end,
 				desc = "Next failed test",
 			},
 			{
-				"<leader>TN",
+				"<leader>tN",
 				function()
 					require("neotest").jump.prev({ status = "failed" })
 				end,
