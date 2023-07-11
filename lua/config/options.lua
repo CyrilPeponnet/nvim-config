@@ -53,6 +53,11 @@ opt.fillchars:append("eob: ")
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
+vim.g.vim_markdown_folding_disabled = 0
+-- only way to have it work properly is in pythonic style
+vim.g.vim_markdown_folding_style_pythonic = 1
+vim.g.vim_markdown_conceal = 0
+vim.g.vim_markdown_frontmatter = 1
 
 -- some neovide configuration
 vim.g.neovide_hide_mouse_when_typing = true

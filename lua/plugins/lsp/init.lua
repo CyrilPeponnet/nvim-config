@@ -10,9 +10,6 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			{
 				"hrsh7th/cmp-nvim-lsp",
-				cond = function()
-					return require("util").has("nvim-cmp")
-				end,
 			},
 		},
 		---@class PluginLspOpts
@@ -36,6 +33,21 @@ return {
 			-- LSP Server Settings
 			---@type lspconfig.options
 			servers = {
+				marksman = {},
+				yamlls = {
+					settings = {
+						yaml = {
+							keyOrdering = {
+								enabled = false,
+							},
+						},
+						redhat = {
+							telemetry = {
+								enabled = false,
+							},
+						},
+					},
+				},
 				bashls = {},
 				jsonls = {},
 				lua_ls = {
@@ -137,7 +149,7 @@ return {
 			local nls = require("null-ls")
 			return {
 				sources = {
-					nls.builtins.formatting.prettierd,
+					nls.builtins.formatting.prettierd.with({ disabled_filetypes = { "yaml" } }),
 					nls.builtins.formatting.stylua,
 					nls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2" } }),
 				},

@@ -1,6 +1,5 @@
 local Util = require("util")
 return {
-
 	-- search/replace in multiple files
 	{
 		"windwp/nvim-spectre",

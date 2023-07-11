@@ -50,6 +50,7 @@ return {
 			{ "<leader><space>", require("util").telescope("files"), desc = "Find files" },
 			{ "<leader><enter>", ":Telescope resume<cr>", desc = "Resume last telescope picker" },
 			-- various search
+			{ "<leader>sg", require("util").telescope("git_status"), desc = "Show git status files" },
 			{ "<leader>sw", require("util").telescope("grep_string"), desc = "Grep word under cursor" },
 			{ "<leader>sr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
 			{ "<leader>sb", "<cmd>Telescope buffers<cr>", desc = "Buffers" },
