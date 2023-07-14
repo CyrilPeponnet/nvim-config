@@ -1,5 +1,3 @@
--- load some utils from lazy.vim
--- mostly for log mesages
 local Util = require("lazy.core.util")
 
 local M = {}
@@ -19,7 +17,25 @@ end
 
 ---@param plugin string
 function M.has(plugin)
-	return require("lazy.core.config").plugins[plugin] ~= nil
+	return require("lazy.core.config").spec.plugins[plugin] ~= nil
+end
+
+function M.fg(name)
+	---@type {foreground?:number}?
+	local hl = vim.api.nvim_get_hl and vim.api.nvim_get_hl(0, { name = name })
+		or vim.api.nvim_get_hl_by_name(name, true)
+	local fg = hl and hl.fg or hl.foreground
+	return fg and { fg = string.format("#%06x", fg) }
+end
+
+---@param fn fun()
+function M.on_very_lazy(fn)
+	vim.api.nvim_create_autocmd("User", {
+		pattern = "VeryLazy",
+		callback = function()
+			fn()
+		end,
+	})
 end
 
 ---@param name string
@@ -77,7 +93,7 @@ function M.get_root()
 end
 
 -- this will return a function that calls telescope.
--- cwd will defautlt to util.get_root
+-- cwd will default to lazyvim.util.get_root
 -- for `files`, git_files or find_files will be chosen depending on .git
 function M.telescope(builtin, opts)
 	local params = { builtin = builtin, opts = opts }
@@ -93,20 +109,64 @@ function M.telescope(builtin, opts)
 				builtin = "find_files"
 			end
 		end
+		if opts.cwd and opts.cwd ~= vim.loop.cwd() then
+			opts.attach_mappings = function(_, map)
+				map("i", "<a-c>", function()
+					local action_state = require("telescope.actions.state")
+					local line = action_state.get_current_line()
+					M.telescope(
+						params.builtin,
+						vim.tbl_deep_extend("force", {}, params.opts or {}, { cwd = false, default_text = line })
+					)()
+				end)
+				return true
+			end
+		end
+
 		require("telescope.builtin")[builtin](opts)
 	end
 end
 
--- FIXME: create a togglable termiminal
+---@type table<string,LazyFloat>
+local terminals = {}
+
 -- Opens a floating terminal (interactive by default)
 ---@param cmd? string[]|string
----@param opts? LazyCmdOptions|{interactive?:boolean}
+---@param opts? LazyCmdOptions|{interactive?:boolean, esc_esc?:false, ctrl_hjkl?:false}
 function M.float_term(cmd, opts)
 	opts = vim.tbl_deep_extend("force", {
-		border = "rounded",
+		ft = "lazyterm",
 		size = { width = 0.9, height = 0.9 },
-	}, opts or {})
-	require("lazy.util").float_term(cmd, opts)
+	}, opts or {}, { persistent = true })
+	---@cast opts LazyCmdOptions|{interactive?:boolean, esc_esc?:false}
+
+	local termkey = vim.inspect({ cmd = cmd or "shell", cwd = opts.cwd, env = opts.env, count = vim.v.count1 })
+
+	if terminals[termkey] and terminals[termkey]:buf_valid() then
+		terminals[termkey]:toggle()
+	else
+		terminals[termkey] = require("lazy.util").float_term(cmd, opts)
+		local buf = terminals[termkey].buf
+		vim.b[buf].lazyterm_cmd = cmd
+		if opts.esc_esc == false then
+			vim.keymap.set("t", "<esc>", "<esc>", { buffer = buf, nowait = true })
+		end
+		if opts.ctrl_hjkl == false then
+			vim.keymap.set("t", "<c-h>", "<c-h>", { buffer = buf, nowait = true })
+			vim.keymap.set("t", "<c-j>", "<c-j>", { buffer = buf, nowait = true })
+			vim.keymap.set("t", "<c-k>", "<c-k>", { buffer = buf, nowait = true })
+			vim.keymap.set("t", "<c-l>", "<c-l>", { buffer = buf, nowait = true })
+		end
+
+		vim.api.nvim_create_autocmd("BufEnter", {
+			buffer = buf,
+			callback = function()
+				vim.cmd.startinsert()
+			end,
+		})
+	end
+
+	return terminals[termkey]
 end
 
 ---@param silent boolean?
@@ -143,7 +203,7 @@ function M.toggle_diagnostics()
 end
 
 function M.deprecate(old, new)
-	Util.warn(("`%s` is deprecated. Please use `%s` instead"):format(old, new), { title = "Vim" })
+	Util.warn(("`%s` is deprecated. Please use `%s` instead"):format(old, new), { title = "LazyVim" })
 end
 
 -- delay notifications till vim.notify was replaced or after 500ms
@@ -181,6 +241,55 @@ function M.lazy_notify()
 	end)
 	-- or if it took more than 500ms, then something went wrong
 	timer:start(500, 0, replay)
+end
+
+function M.lsp_get_config(server)
+	local configs = require("lspconfig.configs")
+	return rawget(configs, server)
+end
+
+---@param server string
+---@param cond fun( root_dir, config): boolean
+function M.lsp_disable(server, cond)
+	local util = require("lspconfig.util")
+	local def = M.lsp_get_config(server)
+	def.document_config.on_new_config = util.add_hook_before(
+		def.document_config.on_new_config,
+		function(config, root_dir)
+			if cond(root_dir, config) then
+				config.enabled = false
+			end
+		end
+	)
+end
+
+---@param name string
+---@param fn fun(name:string)
+function M.on_load(name, fn)
+	local Config = require("lazy.core.config")
+	if Config.plugins[name] and Config.plugins[name]._.loaded then
+		vim.schedule(function()
+			fn(name)
+		end)
+	else
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "LazyLoad",
+			callback = function(event)
+				if event.data == name then
+					fn(name)
+					return true
+				end
+			end,
+		})
+	end
+end
+
+function M.changelog()
+	local lv = require("lazy.core.config").plugins.LazyVim
+	local float = require("lazy.util").open(lv.dir .. "/CHANGELOG.md")
+	vim.wo[float.win].spell = false
+	vim.wo[float.win].wrap = false
+	vim.diagnostic.disable(float.buf)
 end
 
 return M
