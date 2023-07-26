@@ -37,23 +37,7 @@ return {
 			-- LSP Server Settings
 			---@type lspconfig.options
 			servers = {
-				marksman = {},
-				yamlls = {
-					settings = {
-						yaml = {
-							keyOrdering = {
-								enabled = false,
-							},
-						},
-						redhat = {
-							telemetry = {
-								enabled = false,
-							},
-						},
-					},
-				},
 				bashls = {},
-				jsonls = {},
 				lua_ls = {
 					-- mason = false, -- set to false if you don't want this server to be installed with mason
 					settings = {

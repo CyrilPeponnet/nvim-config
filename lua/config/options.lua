@@ -60,10 +60,10 @@ vim.g.vim_markdown_conceal = 0
 vim.g.vim_markdown_frontmatter = 1
 
 -- some neovide configuration
-vim.g.neovide_hide_mouse_when_typing = true
-vim.g.neovide_cursor_vfx_mode = ""
-vim.g.neovide_cursor_animation_length = 0
--- vim.g.neovide_font_hinting = "none"
-vim.g.neovide_font_edging = "subpixelantialias"
+-- vim.g.neovide_hide_mouse_when_typing = true
+-- vim.g.neovide_cursor_vfx_mode = ""
+-- vim.g.neovide_cursor_animation_length = 0
+-- -- vim.g.neovide_font_hinting = "none"
+-- vim.g.neovide_font_edging = "subpixelantialias"
 
 vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
