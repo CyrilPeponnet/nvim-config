@@ -2,8 +2,9 @@
 local function detach_yamlls()
 	local clients = vim.lsp.get_active_clients()
 	for client_id, client in pairs(clients) do
-		if client.name == "yamlls" then
+		if client.name == "yamlls" or client.name == "docker_compose_language_service" then
 			vim.lsp.buf_detach_client(0, client_id)
+			vim.diagnostic.disable(nil, vim.lsp.diagnostic.get_namespace(client.id))
 		end
 	end
 end
