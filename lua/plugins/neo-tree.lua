@@ -39,7 +39,20 @@ return {
 								buftype = { "terminal", "quickfix", "help" },
 							},
 						},
-						other_win_hl_color = "#4f76e3",
+						highlights = {
+							winbar = {
+								focused = {
+									fg = "#ededed",
+									bg = "#4f76e3",
+									bold = true,
+								},
+								unfocused = {
+									fg = "#ededed",
+									bg = "#4f76e3",
+									bold = true,
+								},
+							},
+						},
 					})
 				end,
 			},
