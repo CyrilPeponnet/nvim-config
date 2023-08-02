@@ -329,6 +329,7 @@ return {
 						},
 					},
 					lualine_y = {
+						{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
 						{ "progress", separator = "", padding = { left = 1, right = 1 } },
 					},
 					lualine_z = {
