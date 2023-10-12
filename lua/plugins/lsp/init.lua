@@ -168,7 +168,6 @@ return {
 			local nls = require("null-ls")
 			return {
 				sources = {
-					nls.builtins.formatting.prettierd.with({ disabled_filetypes = { "yaml" } }),
 					nls.builtins.formatting.stylua,
 					nls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2" } }),
 				},

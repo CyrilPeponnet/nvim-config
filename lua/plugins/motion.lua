@@ -4,7 +4,8 @@ return {
 	{ "unblevable/quick-scope", event = "VeryLazy" },
 
 	{
-		"phaazon/hop.nvim",
+		"smoka7/hop.nvim",
+		version = "*",
 		event = "BufRead",
 		keys = {
 			{ "s", "<cmd>:HopChar2<CR>", desc = "Hop 2 chars" },
