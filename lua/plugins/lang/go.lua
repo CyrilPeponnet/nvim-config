@@ -44,7 +44,32 @@ return {
 		config = function()
 			require("go").setup({ gofmt = "gopls" })
 		end,
+		init = function()
+			require("util").on_very_lazy(function()
+				require("plugins.lsp.format").custom_format = function()
+					-- I have no idea why this is working otherwise it strips some lines
+					require("go.format").goimport()
+					return require("go.format")
+				end
+			end)
+		end,
 		dependencies = { "ray-x/guihua.lua" },
+		keys = {
+			{
+				"<leader>gr",
+				function()
+					require("go.rename").lsprename()
+				end,
+				desc = "Go rename",
+			},
+			{
+				"<leader>gf",
+				function()
+					require("go.reftool").fillstruct()
+				end,
+				desc = "Go rename",
+			},
+		},
 	},
 	-- plugin for tests
 	{

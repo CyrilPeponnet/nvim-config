@@ -38,6 +38,20 @@ return {
 			---@type lspconfig.options
 			servers = {
 				bashls = {},
+        pylsp = {
+          settings = {
+            pylsp = {
+              plugins = {
+                pycodestyle = {
+                  ignore = {
+                    "E501"
+                  },
+                },
+              },
+            },
+
+          },
+        },
 				lua_ls = {
 					-- mason = false, -- set to false if you don't want this server to be installed with mason
 					settings = {
